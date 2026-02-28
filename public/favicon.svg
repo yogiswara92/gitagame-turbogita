@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="12" fill="#0a0a1a"/>
+  <!-- Road -->
+  <rect x="20" y="4" width="24" height="56" rx="3" fill="#25253a"/>
+  <!-- Centre stripe -->
+  <rect x="30" y="8"  width="4" height="10" rx="2" fill="rgba(255,255,255,0.3)"/>
+  <rect x="30" y="25" width="4" height="10" rx="2" fill="rgba(255,255,255,0.3)"/>
+  <rect x="30" y="42" width="4" height="10" rx="2" fill="rgba(255,255,255,0.3)"/>
+  <!-- Player car (green) -->
+  <rect x="27" y="36" width="10" height="18" rx="3" fill="#00f5a0"/>
+  <rect x="28.5" y="37.5" width="7" height="5" rx="1.5" fill="rgba(180,230,255,0.8)"/>
+  <!-- Enemy car (orange) -->
+  <rect x="27" y="10" width="10" height="16" rx="3" fill="#ff6b35"/>
+  <rect x="28.5" y="19" width="7" height="4" rx="1.5" fill="rgba(200,220,255,0.7)"/>
+</svg>

@@ -1,0 +1,87 @@
+/* ============================================================
+   TurboRush – Global Styles
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg: #0a0a0f;
+  --color-surface: #12121a;
+  --color-surface-alt: #1a1a28;
+  --color-border: rgba(255,255,255,0.08);
+  --color-primary: #00f5a0;
+  --color-primary-dim: rgba(0,245,160,0.15);
+  --color-accent: #ff6b35;
+  --color-accent-dim: rgba(255,107,53,0.15);
+  --color-danger: #ff3860;
+  --color-text: #f0f0f8;
+  --color-text-muted: rgba(240,240,248,0.5);
+  --glow-primary: 0 0 20px rgba(0,245,160,0.4);
+  --glow-accent: 0 0 20px rgba(255,107,53,0.4);
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --font-game: 'Orbitron', monospace;
+  --font-ui: 'Inter', sans-serif;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-surface); }
+::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 3px; }
+
+/* Button base */
+button {
+  cursor: pointer;
+  font-family: var(--font-game);
+  border: none;
+  outline: none;
+}
+
+/* Utility animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: var(--glow-primary); }
+  50%       { box-shadow: 0 0 40px rgba(0,245,160,0.7); }
+}
