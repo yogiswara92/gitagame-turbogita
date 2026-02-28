@@ -79,8 +79,14 @@ function playNoise({ duration = 0.2, volume = 0.4 }) {
 // Shared engine state
 let engineOsc = null;
 let engineGain = null;
+let currentCarType = 'green'; // default to green
 
 export const SFX = {
+    /** Set current car type for audio characteristics */
+    setCarType: (carType) => {
+        currentCarType = carType;
+    },
+
     /** Engine hum – called each frame with current speed ratio 0-1 */
     engine: (speedRatio) => {
         try {
@@ -94,7 +100,23 @@ export const SFX = {
                 engineGain.gain.value = 0;
                 engineOsc.start();
             }
-            const minFreq = 80, maxFreq = 260;
+            
+            // Different frequency ranges for different cars
+            let minFreq, maxFreq;
+            if (currentCarType === 'yellow') {
+                // Taxi: deeper, slower engine
+                minFreq = 50;
+                maxFreq = 140;
+            } else if (currentCarType === 'pink') {
+                // Pink Spark: medium pitched
+                minFreq = 70;
+                maxFreq = 200;
+            } else {
+                // Green Saber: higher pitched, sporty
+                minFreq = 100;
+                maxFreq = 280;
+            }
+            
             engineOsc.frequency.setTargetAtTime(minFreq + speedRatio * (maxFreq - minFreq), ac.currentTime, 0.1);
             engineGain.gain.setTargetAtTime(speedRatio * 0.06, ac.currentTime, 0.05);
         } catch (e) { }

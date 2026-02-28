@@ -27,11 +27,11 @@ export const PLAYER_START_X = CANVAS_WIDTH / 2 - PLAYER_WIDTH / 2;
 export const PLAYER_START_Y = CANVAS_HEIGHT - 160;
 
 // Physics – dibuat lebih responsif
-export const MAX_SPEED = 14;
-export const ACCELERATION = 0.4;   // was 0.18 – lebih cepat nambah gas
-export const DECELERATION = 0.25;  // was 0.12
-export const FRICTION = 0.06;  // was 0.08
-export const STEER_SPEED = 9;     // was 4.5 – gerakan kiri/kanan jauh lebih cepat
+export const MAX_SPEED = 12;
+export const ACCELERATION = 0.3;   // was 0.4 – lebih smooth
+export const DECELERATION = 0.2;  // was 0.25
+export const FRICTION = 0.05;  // was 0.06
+export const STEER_SPEED = 7;     // was 9 – steering lebih smooth
 export const MIN_SPEED = 0;
 
 // Enemy cars
@@ -51,3 +51,28 @@ export const STRIPE_GAP = 40;
 
 // Collision AABB shrink factor (avoids pixel-perfect but feels fair)
 export const COLLISION_SHRINK = 8;
+
+// Car specifications
+export const CAR_SPECS = {
+    green: {
+        name: 'Green Saber',
+        maxSpeed: 12,  // 300 km/h display
+        displaySpeed: 300,
+        acceleration: 0.3,
+        description: 'Racing Car'
+    },
+    pink: {
+        name: 'Pink Spark',
+        maxSpeed: 8.8,  // 220 km/h display
+        displaySpeed: 220,
+        acceleration: 0.25,
+        description: 'Hatchback'
+    },
+    yellow: {
+        name: 'Public Taxi',
+        maxSpeed: 6,  // 150 km/h display
+        displaySpeed: 150,
+        acceleration: 0.2,
+        description: 'Taxi'
+    }
+};

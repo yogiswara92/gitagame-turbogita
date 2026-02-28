@@ -12,14 +12,20 @@
     resetGame,
     gamePhase,
     PHASE,
+    playerCarType,
   } from "../lib/gameStore.js";
-  import { MAX_SPEED } from "../lib/constants.js";
+  import { CAR_SPECS } from "../lib/constants.js";
   import { SFX } from "../lib/soundEngine.js";
 
   function handleHome() {
     SFX.beep(true);
     resetGame();
   }
+
+  // Get current car's max speed
+  $: carSpecs = CAR_SPECS[$playerCarType];
+  $: currentMaxSpeed = carSpecs.maxSpeed;
+  $: displayMaxSpeed = carSpecs.displaySpeed;
 
   // Format seconds as mm:ss
   function formatTime(s) {
@@ -47,8 +53,8 @@
     return `M ${x1} ${y1} A ${R} ${R} 0 ${large} 1 ${x2} ${y2}`;
   }
 
-  $: speedRatio = Math.min($playerSpeed / MAX_SPEED, 1);
-  $: speedKmh = Math.round(speedRatio * 260);
+  $: speedRatio = Math.min($playerSpeed / currentMaxSpeed, 1);
+  $: speedKmh = Math.round(speedRatio * displayMaxSpeed);
   $: arcPath = speedArcPath(speedRatio);
 
   // Colour lerp based on speed

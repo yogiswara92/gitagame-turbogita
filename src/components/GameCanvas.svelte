@@ -56,6 +56,7 @@
         STRIPE_HEIGHT,
         STRIPE_GAP,
         COLLISION_SHRINK,
+        CAR_SPECS,
     } from "../lib/constants.js";
 
     // ── Canvas ref ────────────────────────────────────────────
@@ -66,6 +67,11 @@
     let animId = null;
     let lastTime = 0;
     let running = false; // guard flag – true while game loop is active
+
+    // Dynamic max speed based on selected car
+    let currentMaxSpeed = MAX_SPEED;
+    let currentAcceleration = ACCELERATION;
+    let speedRatio = 1; // ratio of currentMaxSpeed vs default MAX_SPEED
 
     // Player
     let px = PLAYER_START_X + PLAYER_WIDTH / 2;
@@ -308,15 +314,17 @@
             const laneIdx = leastBusyLanes[Math.floor(Math.random() * leastBusyLanes.length)];
             
             const ex = LANE_CENTERS[laneIdx];
+            // Scale enemy speed based on player car's speedRatio
             const eSpeed =
-                ENEMY_BASE_SPEED +
+                (ENEMY_BASE_SPEED +
                 diffLevel * DIFFICULTY_SPEED_INC +
-                speed * 0.4;
+                speed * 0.4) * speedRatio;
             enemies.push(createEnemy(ex, -ENEMY_HEIGHT / 2, eSpeed));
 
+            // Scale spawn interval based on speedRatio (slower car = slower spawn rate)
             spawnInterval = Math.max(
-                ENEMY_SPAWN_INTERVAL_MIN,
-                ENEMY_SPAWN_INTERVAL - (diffLevel - 1) * 140,
+                ENEMY_SPAWN_INTERVAL_MIN / speedRatio,
+                (ENEMY_SPAWN_INTERVAL - (diffLevel - 1) * 140) / speedRatio,
             );
         }
     }
@@ -332,7 +340,7 @@
 
         // Speed
         if (accelKey) {
-            speed = Math.min(speed + ACCELERATION * dtF, MAX_SPEED);
+            speed = Math.min(speed + currentAcceleration * dtF, currentMaxSpeed);
         } else if (brakeKey) {
             speed = Math.max(speed - DECELERATION * dtF * 1.5, 0);
         } else {
@@ -362,7 +370,8 @@
         elapsedMs += dt;
         diffTimer += dt;
 
-        if (diffTimer >= DIFFICULTY_INTERVAL * 1000) {
+        // Scale difficulty timing based on speedRatio (slower car = longer time to level up)
+        if (diffTimer >= (DIFFICULTY_INTERVAL * 1000) / speedRatio) {
             diffTimer = 0;
             diffLevel++;
             difficulty.set(diffLevel);
@@ -371,7 +380,7 @@
 
         if (elapsedMs - lastScoreTick >= 200) {
             lastScoreTick = elapsedMs;
-            const speedBonus = Math.round((speed / MAX_SPEED) * 8);
+            const speedBonus = Math.round((speed / currentMaxSpeed) * 8);
             scoreAcc += 2 + speedBonus;
             score.set(scoreAcc);
         }
@@ -431,7 +440,7 @@
             (e) => e.y < CANVAS_HEIGHT + ENEMY_HEIGHT + 20,
         );
 
-        SFX.engine(speed / MAX_SPEED);
+        SFX.engine(speed / currentMaxSpeed);
         checkCollisions();
         updateParticles();
 
@@ -440,7 +449,7 @@
         drawScenery();
         drawRoad();
         enemies.forEach((e) => drawEnemyCar(ctx, e));
-        drawPlayerCar(ctx, px, py, tilt, speed / MAX_SPEED, get(playerCarType));
+        drawPlayerCar(ctx, px, py, tilt, speed / currentMaxSpeed, get(playerCarType));
         drawParticles();
 
         if (crashFlash > 0) {
@@ -449,13 +458,24 @@
             crashFlash -= 0.09;
         }
 
-        if (speed > MAX_SPEED * 0.6) drawSpeedLines();
+        // Speed lines animation disabled
+        // if (speed > currentMaxSpeed * 0.6) drawSpeedLines();
 
         animId = requestAnimationFrame(gameLoop);
     }
 
     // ── Start / Stop helpers ──────────────────────────────────
     function startLoop() {
+        // Set car-specific stats
+        const carType = get(playerCarType);
+        const carSpecs = CAR_SPECS[carType];
+        currentMaxSpeed = carSpecs.maxSpeed;
+        currentAcceleration = carSpecs.acceleration;
+        speedRatio = currentMaxSpeed / MAX_SPEED; // ratio for scaling difficulty
+        
+        // Set audio characteristics for this car type
+        SFX.setCarType(carType);
+
         // Reset all game state
         px = PLAYER_START_X + PLAYER_WIDTH / 2;
         py = PLAYER_START_Y + PLAYER_HEIGHT / 2;

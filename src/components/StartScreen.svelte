@@ -4,6 +4,7 @@
      * Includes keyboard hint, high score display, and a pulsing Cars visual.
      */
     import { highScore, playerCarType, CAR_TYPES } from "../lib/gameStore.js";
+    import { CAR_SPECS } from "../lib/constants.js";
     import { SFX } from "../lib/soundEngine.js";
 
     export let onStart;
@@ -50,8 +51,8 @@
     <div class="car-preview" aria-hidden="true">
         <div class="car-preview-road">
             <div class="car-icon player-car-icon">🚗</div>
-            <div class="car-icon enemy-icon e1">🚕</div>
-            <div class="car-icon enemy-icon e2">🚙</div>
+            <div class="car-icon player-car-icon">🚕</div>
+            <div class="car-icon player-car-icon">🚙</div>
         </div>
     </div>
 
@@ -65,7 +66,8 @@
                 aria-label="Green Racing Car"
             >
                 <div class="car-color green"></div>
-                <div class="car-label"> Green Saber</div>
+                <div class="car-label">Green Saber</div>
+                <div class="car-speed">300 km/h</div>
             </button>
             <button
                 class="car-option {$playerCarType === CAR_TYPES.PINK ? 'active' : ''}"
@@ -74,6 +76,7 @@
             >
                 <div class="car-color pink"></div>
                 <div class="car-label">Pink Spark</div>
+                <div class="car-speed">220 km/h</div>
             </button>
             <button
                 class="car-option {$playerCarType === CAR_TYPES.YELLOW ? 'active' : ''}"
@@ -82,12 +85,13 @@
             >
                 <div class="car-color yellow"></div>
                 <div class="car-label">Public Taxi</div>
+                <div class="car-speed">150 km/h</div>
             </button>
         </div>
     </div>
 
     <!-- Controls guide -->
-    <div class="controls-guide">
+    <!-- <div class="controls-guide">
         <div class="guide-row">
             <div class="key-group">
                 <div class="key wide" aria-label="Arrow Up key">↑</div>
@@ -102,7 +106,7 @@
                 <small>or touch buttons on mobile</small>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- High score -->
     {#if $highScore > 0}
@@ -153,13 +157,7 @@
     .grid-bg {
         position: absolute;
         inset: 0;
-        background-image: linear-gradient(
-                rgba(0, 245, 160, 0.04) 1px,
-                transparent 1px
-            ),
-            linear-gradient(90deg, rgba(0, 245, 160, 0.04) 1px, transparent 1px);
-        background-size: 36px 36px;
-        animation: pan 8s linear infinite;
+        display: none;
     }
 
     @keyframes pan {
@@ -270,10 +268,42 @@
     .car-icon {
         font-size: 26px;
         filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+        padding: 6px 8px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .car-icon.green-car {
+        background: linear-gradient(135deg, rgba(0, 245, 160, 0.3), rgba(0, 122, 80, 0.3));
+        border: 2px solid #00f5a0;
+    }
+
+    .car-icon.pink-car {
+        background: linear-gradient(135deg, rgba(255, 105, 180, 0.3), rgba(199, 21, 133, 0.3));
+        border: 2px solid #ff69b4;
+    }
+
+    .car-icon.yellow-car {
+        background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(204, 149, 0, 0.3));
+        border: 2px solid #ffd700;
     }
 
     .player-car-icon {
         animation: bounce 0.8s ease-in-out infinite alternate;
+    }
+
+    .player-car-icon:nth-child(1) {
+        animation-delay: 0s;
+    }
+
+    .player-car-icon:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .player-car-icon:nth-child(3) {
+        animation-delay: 0.4s;
     }
 
     .enemy-icon {
@@ -382,8 +412,21 @@
         text-transform: uppercase;
     }
 
+    .car-speed {
+        font-family: var(--font-game);
+        font-size: 9px;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.4);
+        margin-top: 2px;
+    }
+
     .car-option.active .car-label {
         color: var(--color-primary);
+        font-weight: 600;
+    }
+
+    .car-option.active .car-speed {
+        color: rgba(0, 245, 160, 0.7);
         font-weight: 600;
     }
     .controls-guide {
