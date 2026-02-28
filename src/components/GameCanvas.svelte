@@ -547,16 +547,8 @@
 
 <!-- Mobile touch buttons (visible on coarse-pointer / touch devices) -->
 <div class="touch-controls" aria-label="Touch controls">
-    <div class="touch-row top-touch">
-        <button
-            class="touch-btn large"
-            id="touch-accel"
-            on:touchstart|preventDefault={() => (touchUp = true)}
-            on:touchend|preventDefault={() => (touchUp = false)}
-            aria-label="Accelerate">▲</button
-        >
-    </div>
-    <div class="touch-row">
+    <!-- Left side: steering controls -->
+    <div class="control-group left-controls">
         <button
             class="touch-btn"
             id="touch-left"
@@ -566,17 +558,28 @@
         >
         <button
             class="touch-btn"
-            id="touch-brake"
-            on:touchstart|preventDefault={() => (touchDown = true)}
-            on:touchend|preventDefault={() => (touchDown = false)}
-            aria-label="Brake">▼</button
-        >
-        <button
-            class="touch-btn"
             id="touch-right"
             on:touchstart|preventDefault={() => (touchRight = true)}
             on:touchend|preventDefault={() => (touchRight = false)}
             aria-label="Right">▶</button
+        >
+    </div>
+    
+    <!-- Right side: gas and brake -->
+    <div class="control-group right-controls">
+        <button
+            class="touch-btn large"
+            id="touch-accel"
+            on:touchstart|preventDefault={() => (touchUp = true)}
+            on:touchend|preventDefault={() => (touchUp = false)}
+            aria-label="Accelerate">▲</button
+        >
+        <button
+            class="touch-btn small"
+            id="touch-brake"
+            on:touchstart|preventDefault={() => (touchDown = true)}
+            on:touchend|preventDefault={() => (touchDown = false)}
+            aria-label="Brake">▼</button
         >
     </div>
 </div>
@@ -584,6 +587,8 @@
 <style>
     canvas {
         display: block;
+        width: 100%;
+        height: 100%;
         image-rendering: crisp-edges;
         border-radius: 12px 12px 0 0;
         position: relative;
@@ -601,11 +606,11 @@
         bottom: 0;
         left: 0;
         right: 0;
-        padding: 8px 16px 12px;
+        padding: 8px 12px 12px;
         display: none; /* shown via media query below */
-        flex-direction: column;
-        align-items: center;
-        gap: 6px;
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
         z-index: 20;
     }
 
@@ -615,35 +620,64 @@
         }
     }
 
+    .control-group {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+    }
+
+    .left-controls {
+        flex-direction: row;
+    }
+
+    .right-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+
     .touch-row {
         display: flex;
         gap: 8px;
     }
 
     .touch-btn {
-        width: 60px;
-        height: 48px;
+        width: 56px;
+        height: 56px;
         background: rgba(255, 255, 255, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 10px;
+        border-radius: 12px;
         color: rgba(255, 255, 255, 0.85);
-        font-size: 18px;
+        font-size: 20px;
+        font-weight: bold;
         backdrop-filter: blur(6px);
         transition:
-            background 0.1s,
-            border-color 0.1s;
+            background 0.15s,
+            border-color 0.15s,
+            transform 0.1s;
         user-select: none;
         -webkit-user-select: none;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        active-scale: 0.92;
     }
 
     .touch-btn:active {
         background: rgba(0, 245, 160, 0.3);
         border-color: var(--color-primary);
+        transform: scale(0.92);
     }
 
     .touch-btn.large {
-        width: 90px;
-        height: 44px;
+        width: 76px;
+        height: 76px;
+        font-size: 28px;
+    }
+
+    .touch-btn.small {
+        width: 48px;
+        height: 48px;
+        font-size: 18px;
     }
 </style>

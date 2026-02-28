@@ -247,13 +247,19 @@
   /* ── Speedometer ── */
   .speedo {
     position: absolute;
-    bottom: 20px;
-    left: 20px;
+    bottom: 118px;
+    left: 12px;
     width: 88px;
     height: 88px;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  @media (pointer: coarse) {
+    .speedo {
+      bottom: 126px;
+    }
   }
 
   .speedo svg {
